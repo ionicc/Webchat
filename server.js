@@ -12,7 +12,7 @@ app.set('port', process.env.PORT || 5000);
 
 
 app.get('/', function(req, res){
-  res.render('index');
+  res.render('index.htm');
 });
 
 io.on('connection', function(socket){
