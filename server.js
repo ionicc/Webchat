@@ -2,8 +2,17 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'htm');
+
+app.use(express.static(__dirname + 'public'));
+
+
+app.set('port', process.env.PORT || 5000);
+
+
 app.get('/', function(req, res){
-  res.sendFile(__dirname +"/index.htm");
+  res.render('index');
 });
 
 io.on('connection', function(socket){
@@ -20,6 +29,7 @@ io.on('connection', function(socket){
 
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});
+app.listen('port', function () {
+
+  console.log("The server is up");
+})
