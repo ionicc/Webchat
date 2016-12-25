@@ -1,35 +1,40 @@
 var app = require('express')();
+var express = require('express');
+
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var listen = process.env.PORT || 3000;
 
-app.set('views', __dirname + '/views');
-app.set('view engine', 'htm');
+app.use(express.static(__dirname +'/public'));
 
-app.use(express.static(__dirname + 'public'));
+app.get('/', function (req,res) {
 
+  console.log("index");
+  res.sendFile(__dirname + '/public/index.htm');
 
-app.set('port', process.env.PORT || 5000);
-
-
-app.get('/', function(req, res){
-  res.render('index.htm');
 });
 
-io.on('connection', function(socket){
-  console.log('a user connected');
+io.on('connection', function(socket) {
+
+  console.log("A user connected");
+
   socket.on('disconnect', function() {
-  	console.log("A user disconnected");
+
+    console.log("A user disconnected");
   })
 
-  socket.on(('chat message'), function(msg) {
+  socket.on('chat message', function(msg) {
 
-  io.emit('chat message', msg);
-  console.log(msg);
-  })
+    console.log('Message:' + msg);
 
+    io.emit('chat message', msg);
+
+  });
+
+  
 });
 
-app.listen('port', function () {
 
-  console.log("The server is up");
+http.listen(listen, function() {
+  console.log("Listening on:" +listen);
 })
